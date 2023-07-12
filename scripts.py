@@ -1,3 +1,5 @@
+from shutil import get_terminal_size 
+
 # размер поля
 dim = 3
 
@@ -31,3 +33,17 @@ def generator_wins(dim: int) -> list:
     out.append({element for element in myList[dim-1:-1:dim-1]})
 #    print(out) 
     return out
+    
+    
+def show_title():
+    """Выводит заголовок игры"""
+        
+#    turtles = get_terminal_size()
+    width = get_terminal_size().columns - 2
+
+    title = f'\n#{"="*(width)}##{" "*(width)}##'    
+    title += f'{"Игра".center(width)}##'  
+    title += f'{"Крестики-Нолики".center(width)}' 
+    title += f'##{" "*(width)}##{"="*(width)}#\n'
+    
+    print(title)
