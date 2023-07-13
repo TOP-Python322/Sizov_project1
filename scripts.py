@@ -134,6 +134,28 @@ def get_player_name() -> str:
         
     return name
     
+
+def print_statistics():
+    """ Выводит таблицу результатов с именами и статистикой игроков"""
+    width = get_terminal_size().columns - 2
+
+    result = f'\n#{"="*width}##'
+    result += f'{"Таблица результатов".center(width)}'   
+    result += f'##{"="*width}#\n'
+    
+    print(result)
+
+
+def game_mode():
+    """ Ведет игру"""   
+    print('Новая игра')
+    
+ 
+def load():
+    """ Загружает сохраненную игру если она есть"""   
+    print('Загрузка сохраненной партии')
+
+    
 # ---------  основная программа -----------------    
 
 # выводим приветствие
@@ -141,26 +163,37 @@ show_title()
 
 # читаем файл со статистикой игроков
 statistics = read_ini()
-# !!! временно для проверки
-print(statistics)
 
 # Если первый запуск программы то вывод справки
 if len(statistics) == 0:
     show_help()
 
 # запрашиваем имя первого игрока     
-get_player_name()    
-# подумать над тем где сделать проверку имени игрока в самой функции или отдельно
+players = [get_player_name()]    
 
-# Главный цикл
+
+# Главный цикл (Главное меню)
 command = input('Введите команду: ')
 while command != 'quit':
     # если новая игра
     if command == 'new' or command == 'игра':
-        print('Новая игра')
+        game_mode()    
         
     elif command == 'load' or command == 'загрузка':
-        print('Загрузка сохраненной партии')
+        load()
+     
+    elif command == 'help' or command == 'помощь':
+        # выводим справку
+        show_help()
+    
+    elif command == 'table' or command == 'таблица':
+        # выводим таблицу результатов
+        print_statistics()
+        
+    elif command == 'player' or command == 'игрок':
+        # переключаемся на другого игрока
+        print('переключение на другого игрока')  
+        players = [get_player_name()]         
         
     elif command == 'dim' or command == 'размер':
         # добавить здесь обработку исключения на некорректный ввод
