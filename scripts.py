@@ -1,5 +1,5 @@
 from shutil import get_terminal_size 
-
+import configparser
 
 # размер поля
 dim = 3
@@ -99,13 +99,39 @@ def read_ini() -> dict:
     """Читает данные из файла и формирует структуру данных по статистике"""
     
     stat = {}
+    config = configparser.ConfigParser()
     
-    return stat
-    
+    # усли файл есть то читаем из него
+    if len(config.read('statistics.ini')):
+        for section_name in config.sections(): 
+#        print('Section:', section_name) 
+#        print(' Options:', config.options(section_name)) 
+#        for key, value in config.items(section_name): 
+#            print(' {} = {}'.format(key, value)) 
+#        print()
+            stat[section_name] = dict(config.items(section_name))
 
+    return stat
+ 
+ 
+def write_ini() :
+    """Записывает структуру данных по статистике в файл"""
+    config = configparser.ConfigParser()
+    config.read_dict(statistics)
+    with open('statistics.ini', 'w') as configfile:
+        config.write(configfile) 
+    
+    
 def get_player_name() -> str:
     """Запрашивает имя игрока"""    
     name = input('Введите имя игрока: ')
+
+    # усли новый игрок то добавляем его
+    if name not in statistics:
+        statistics[name] = {'wins' : 0, 'fails' : 0, 'ties' : 0}
+        # сохранение конфигурации
+        write_ini()   
+        
     return name
     
 # ---------  основная программа -----------------    
@@ -113,8 +139,10 @@ def get_player_name() -> str:
 # выводим приветствие
 show_title()
 
-# читаем файл со статистикой играков
+# читаем файл со статистикой игроков
 statistics = read_ini()
+# !!! временно для проверки
+print(statistics)
 
 # Если первый запуск программы то вывод справки
 if len(statistics) == 0:
