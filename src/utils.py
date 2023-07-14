@@ -68,9 +68,16 @@ def update_dim():
             print(data.MESSAGES['недопустимое значение'])
 
     data.dim = dim
-    data.dim_range: range = range(dim)
-    data.all_cells: int = dim**2
-    
+    data.dim_range = range(dim)
+    data.all_cells = dim**2
+    data.field_template = generator_field()
+ 
+ 
 def game_over():
     """Действия перед завершением работы приложения"""
     print('GAME OVER') 
+    
+    
+def error_command():
+    """ Выводит сообщение о не правильной команде"""   
+    print('Такой команды нет!')    

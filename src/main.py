@@ -9,6 +9,7 @@ import help
 import players
 import utils
 
+
 # выводим заставку
 help.show_title()
 
@@ -28,9 +29,9 @@ while True:
     
     if command in data.COMMANDS['новая партия']:
         game.mode()
-        result = game.game()
-        if result:
-            players.update()
+#        result = game.game()
+#        if result:
+#            players.update()
     
     elif command in data.COMMANDS['загрузка']:
         game.load()
@@ -47,8 +48,6 @@ while True:
     
     elif command in data.COMMANDS['размер поля']:
         utils.update_dim()
-        
-    # elif command in data.COMMANDS['']:
     
     elif command in data.COMMANDS['выход']:
         break
