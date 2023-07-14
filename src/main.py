@@ -29,7 +29,7 @@ while True:
     
     if command in data.COMMANDS['новая партия']:
         game.mode()
-#        result = game.game()
+        result = game.game()
 #        if result:
 #            players.update()
     
