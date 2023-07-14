@@ -28,3 +28,20 @@ def write_ini() -> None:
         config.write(configfile) 
         
 
+def generator_field(width: int = 1) -> str:
+    """Генерирует шаблон игрового поля для отображения"""
+    row = '|'.join([' {} ']*data.dim)
+    h_line = '-'*(data.dim*(width+2) + data.dim-1)
+    return f'\n{h_line}\n'.join([row]*data.dim)
+
+    
+def generator_wins() -> list:
+    """Генерирует выигрышные комбинации"""  
+    out = []
+    my_list = [i for i in range(0, data.all_cells)]    
+    for i in data.dim_range:
+        out.append({element for element in my_list[i*data.dim:data.dim*(i+1)]})
+        out.append({element for element in my_list[i::data.dim]})
+    out.append({element for element in my_list[::data.dim+1]})
+    out.append({element for element in my_list[data.dim-1:-1:data.dim-1]})
+    return out
