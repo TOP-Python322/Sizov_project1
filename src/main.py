@@ -20,3 +20,41 @@ if not utils.read_ini():
     
 # Запрос имени игрока
 players.get_name()    
+
+# суперцикл (главное меню)
+while True:
+    # Ожидание ввода команды игрока
+    command = input(data.MESSAGES['ввод команды'])
+    
+    if command in data.COMMANDS['новая партия']:
+        game.mode()
+        result = game.game()
+        if result:
+            players.update()
+    
+    elif command in data.COMMANDS['загрузка']:
+        game.load()
+
+    elif command in data.COMMANDS['авторизация']:
+        # переключаемся на другого игрока
+        data.authorized_player = ''
+        data.active_players = []
+        players.get_name() 
+    
+    elif command in data.COMMANDS['статистика']:
+        # выводим таблицу результатов
+        utils.print_statistics()   
+    
+    elif command in data.COMMANDS['размер поля']:
+        utils.update_dim()
+        
+    # elif command in data.COMMANDS['']:
+    
+    elif command in data.COMMANDS['выход']:
+        break
+        
+    else:
+        utils.error_command()
+
+# Действия перед завершением работы приложения
+utils.game_over()
