@@ -38,7 +38,7 @@ def mode():
             print('Некоректный ввод!')
     
     while True: 
-        token = input('Введите токен которым будет играть первый игрок (X или O): ')  
+        token = input(f'Введите токен которым будет играть {data.active_players[0]} (X или O): ')  
         if token in data.TOKENS:
             if token == data.TOKENS[1]:
                 data.active_players[0],data.active_players[1] = data.active_players[1], data.active_players[0]        
@@ -53,7 +53,7 @@ def game() -> list[str] | None:
     
     Возвращает список имён в формате ['имя_выигравшего', 'имя_проигравшего'], пустой список для ничьей или None, если партия не завершена.
    """
-    data.field = utils.generator_field()
+    data.field_template = utils.generator_field()
     #  Цикл до максимального количества ходов
     for t in range(len(data.turns), data.all_cells):
         # индекс-указатель на игрока и токен
@@ -65,7 +65,8 @@ def game() -> list[str] | None:
         else:
             get_human_turn(data.TOKENS[parity])
             
-        print(data.turns)    
+#        print(data.turns)   
+        print_board()    
         # шаги 11–13
     print('\nПартия закончена.\n')    
     return False    
@@ -78,9 +79,15 @@ def get_human_turn(token: str):
             print("Ход не допустим! ")
         else:
             data.turns[step] = token
+            data.board[step] = token
             break
 
 
 def get_bot_turn():
     """Генерирует ход бота"""
-    pass        
+    pass  
+
+
+def print_board():
+    """Выводит игровое поле с выводом ходов"""
+    print(data.field_template.format(*data.board.values()))
