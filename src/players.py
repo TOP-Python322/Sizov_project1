@@ -21,11 +21,11 @@ def get_name() -> str:
             'fails': 0,
             'ties': 0
         }
+        # сохранение конфигурации для нового игрока
+        utils.write_ini() 
+        
     if data.authorized_player is None:
         data.authorized_player = name
-    data.active_players += [name]
-   
-    # сохранение конфигурации
-    utils.write_ini()   
+    data.active_players += [name]      
         
 #    return name
