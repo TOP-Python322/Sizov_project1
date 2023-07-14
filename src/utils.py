@@ -45,3 +45,32 @@ def generator_wins() -> list:
     out.append({element for element in my_list[::data.dim+1]})
     out.append({element for element in my_list[data.dim-1:-1:data.dim-1]})
     return out
+
+
+def print_statistics():
+    """ Выводит таблицу результатов с именами и статистикой игроков"""
+    width = get_terminal_size().columns - 2
+    result = f'\n#{"="*width}##'
+    result += f'{"Таблица результатов".center(width)}'   
+    result += f'##{"="*width}#\n'    
+    print(result)
+    
+    
+def update_dim():
+    """ Обновляет размер поля"""    
+#    добавить здесь обработку исключения на некорректный ввод
+    while True:
+        dim = int(input(data.MESSAGES['размер поля']))
+    
+        if 3<=dim <= 20:
+            break
+        else:
+            print(data.MESSAGES['недопустимое значение'])
+
+    data.dim = dim
+    data.dim_range: range = range(dim)
+    data.all_cells: int = dim**2
+    
+def game_over():
+    """Действия перед завершением работы приложения"""
+    print('GAME OVER') 
