@@ -4,6 +4,7 @@
 
 # стандартная библиотека
 from configparser import ConfigParser
+from shutil import get_terminal_size 
 # проект
 import data
 
@@ -11,7 +12,7 @@ import data
 def read_ini() -> dict:
     """Читает данные из файла и формирует структуру данных по статистике"""    
     config = ConfigParser()    
-    config.read(data.PLAYERS_DB_PATH)
+    config.read(data.PLAYERS_DB_PATH, encoding='utf-8')
     for player in config.sections(): 
         data.players_db[player] = {
             k: int(v)
@@ -49,12 +50,22 @@ def generator_wins() -> list:
 
 def print_statistics():
     """ Выводит таблицу результатов с именами и статистикой игроков"""
-    width = get_terminal_size().columns - 2
-    result = f'\n#{"="*width}##'
+    # Добавить сортировку по колличеству побед
+    max_width = max(len(n) for n in data.players_db) +2
+    width =  max_width + 36   
+    result = f'\n#{"="*width}#\n#'
     result += f'{"Таблица результатов".center(width)}'   
-    result += f'##{"="*width}#\n'    
+    result += f'#\n#{"="*width}#'    
     print(result)
-    
+    print(f'|{"Игрок".center(max_width)}|   Победы  | Поражения |   Ничьи   |')
+    print(f'|{"-"*width}|')
+    for gamer in data.players_db:
+        out = f'|{gamer.center(max_width)}|'
+        for value in data.players_db[gamer].values():
+            out += f'{str(value).center(11)}|'    
+        print(out)
+        print(f'|{"-"*width}|')
+
     
 def update_dim():
     """ Обновляет размер поля"""    
