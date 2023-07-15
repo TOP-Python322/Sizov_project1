@@ -8,6 +8,7 @@ from shutil import get_terminal_size
 import players
 import data
 import utils
+import bot
 
 wins = utils.generator_wins()
 
@@ -65,7 +66,7 @@ def game() -> list[str] | None:
         print(f'\nХод игрока {data.active_players[parity]}')
         # если ход бота
         if data.active_players[parity].startswith('#'):
-            get_bot_turn()
+            get_bot_turn(data.TOKENS[parity], 'l' if data.active_players[parity] == '#1' else 'h')
         else:
             get_human_turn(data.TOKENS[parity])
         
@@ -76,10 +77,10 @@ def game() -> list[str] | None:
             if comb <= set(data.turns[parity::2]):
                 print(f'\nПобеждает {data.active_players[parity]}\n')
                 return [data.active_players[parity],data.active_players[1-parity]]
-        # шаги 11–13
     print('\nПартия закончена. Ничья\n')    
     return []    
-        
+ 
+ 
 def get_human_turn(token: str):
     """Запрашивает и выполняет ход игрока"""
     while True: 
@@ -87,15 +88,20 @@ def get_human_turn(token: str):
         if step in data.turns or step not in range(data.all_cells):
             print("Ход не допустим! ")
         else:
-            #data.turns[step] = token
             data.turns.append(step)
             data.board[step] = token
             break
 
 
-def get_bot_turn():
-    """Генерирует ход бота"""
-    pass  
+def get_bot_turn(token: str, level: str):
+    """Генерирует ход бота.
+    Передается токен которым играет бот и уровень сложности"""
+    if level == 'l':
+        step_bot = bot.game_low()
+        data.turns.append(step_bot)
+        data.board[step_bot] = token  
+    else:
+        print('\n !!!!!! Режим не реализован !!!!!!\n')
 
 
 def print_board(step: int):
