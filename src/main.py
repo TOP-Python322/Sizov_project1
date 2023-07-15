@@ -30,8 +30,8 @@ while True:
     if command in data.COMMANDS['новая партия']:
         game.mode()
         result = game.game()
-#        if result:
-#            players.update()
+        if result:
+            players.update(result)
         # очищаем данные от значений прошедшей партии
         utils.clear()
     

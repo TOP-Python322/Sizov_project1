@@ -15,7 +15,7 @@ def mode():
     """Определяет режим игры"""
     
     while True:
-        number = int(input('Сколько человек будет играть? Введите 1 или 2: '))
+        number = int(input('\nСколько человек будет играть? Введите 1 или 2: '))
         
         # если два игрока
         if number == 2:
@@ -42,8 +42,8 @@ def mode():
             print('Некоректный ввод!')
     
     while True: 
-        token = input(f'Введите токен которым будет играть {data.active_players[0]} (X или O): ').upper()  
-        if token in data.TOKENS:
+        token = input(f'\nВведите токен которым будет играть {data.active_players[0]} (X или O): ').upper()  
+        if token in ['X', 'O', 'Х', 'О']:
             if token == data.TOKENS[1]:
                 data.active_players[0],data.active_players[1] = data.active_players[1], data.active_players[0]        
             
@@ -62,7 +62,7 @@ def game() -> list[str] | None:
     for t in range(len(data.turns), data.all_cells):
         # индекс-указатель на игрока и токен
         parity = t % 2
-        print(f'Ход игрока {data.active_players[parity]}')
+        print(f'\nХод игрока {data.active_players[parity]}')
         # если ход бота
         if data.active_players[parity].startswith('#'):
             get_bot_turn()

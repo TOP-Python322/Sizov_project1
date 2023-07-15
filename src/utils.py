@@ -102,7 +102,7 @@ def concatenate_lines(
 def clear():
     """Очищает результат партии. 
     Возвращение списка активных игроков к состоянию до ввода команды new, сброс структуры данных для ходов"""    
-    data.turns = []
+    data.turns = [] # data.turns.clear() или так, узнать как лучше
     data.board = dict.fromkeys(range(data.all_cells), ' ')
     data.active_players = [data.authorized_player]
     field_template = ''

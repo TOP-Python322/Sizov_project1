@@ -28,4 +28,27 @@ def get_name() -> str:
         data.authorized_player = name
     data.active_players += [name]      
         
-#    return name
+
+def update(gamers: list[str]):
+    """Обновляет статистику и записыает в файл"""
+    # если не ничья
+    if len(gamers) > 0:
+        # победитель
+        gamer = gamers[0]
+        # если игрок не бот
+        if not gamer.startswith('#'):
+            data.players_db[gamer]['wins'] += 1
+        # проигравший
+        gamer = gamers[1]
+        # если игрок не бот
+        if not gamer.startswith('#'):
+            data.players_db[gamer]['fails'] += 1    
+
+    else:
+        for gamer in data.active_players:
+            # если игрок не бот
+            if not gamer.startswith('#'):
+                data.players_db[gamer]['ties'] += 1
+                
+    # перезаписываем файл
+    utils.write_ini() 
