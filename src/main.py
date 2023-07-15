@@ -32,6 +32,8 @@ while True:
         result = game.game()
 #        if result:
 #            players.update()
+        # очищаем данные от значений прошедшей партии
+        utils.clear()
     
     elif command in data.COMMANDS['загрузка']:
         game.load()

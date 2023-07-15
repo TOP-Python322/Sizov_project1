@@ -96,4 +96,13 @@ def concatenate_lines(
     return '\n'.join(
         padding.join(row)
         for row in zip(*multilines)
-    )    
+    ) 
+
+
+def clear():
+    """Очищает результат партии. 
+    Возвращение списка активных игроков к состоянию до ввода команды new, сброс структуры данных для ходов"""    
+    data.turns = []
+    data.board = dict.fromkeys(range(data.all_cells), ' ')
+    data.active_players = [data.authorized_player]
+    field_template = ''
