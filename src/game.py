@@ -68,10 +68,12 @@ def game() -> list[str] | None:
         if data.active_players[parity].startswith('#'):
             get_bot_turn(data.TOKENS[parity], 'l' if data.active_players[parity] == '#1' else 'h')
         else:
-            get_human_turn(data.TOKENS[parity])
+            if get_human_turn(data.TOKENS[parity]):
+                # сохраняем текущую партию и выходим в главное меню
+                save()
+                return []
         
         print_board(parity)    
-        # проверка на выигрыш, делать здесь или в ходе игрока? 
         # проверка на выигрыш
         for comb in wins:
             if comb <= set(data.turns[parity::2]):
@@ -81,16 +83,24 @@ def game() -> list[str] | None:
     return []    
  
  
-def get_human_turn(token: str):
+def get_human_turn(token: str) -> bool:
     """Запрашивает и выполняет ход игрока"""
     while True: 
-        step = int(input('Введите номер клетки: '))
-        if step in data.turns or step not in range(data.all_cells):
-            print("Ход не допустим! ")
+        step = input('Введите номер клетки: ')
+        # если пустой ввод, то завершаем партию с сохранением
+        if step == '':
+            return(True)
+        if step.isdigit():
+            step = int(step)
+            if step in data.turns or step not in range(data.all_cells):
+                print("Ход не допустим! ")
+            else:
+                data.turns.append(step)
+                data.board[step] = token
+                return(False)
+#                break
         else:
-            data.turns.append(step)
-            data.board[step] = token
-            break
+            print(data.MESSAGES['недопустимое значение'])
 
 
 def get_bot_turn(token: str, level: str):
@@ -113,3 +123,12 @@ def print_board(step: int):
         print(utils.concatenate_lines(utils.generator_field(max_width).format(*coords), data.field_template.format(*data.board.values()), padding = padding))
     else:
         print(utils.concatenate_lines(data.field_template.format(*data.board.values()), utils.generator_field(max_width).format(*coords), padding = padding))
+
+
+def save():
+    """Сохраняет текущую партию"""
+    turns = []
+    for n in data.turns:
+        turns += [str(n)]
+    with open(data.SAVES_DB_PATH, 'a', encoding='utf-8') as fileout:
+        fileout.write(f'{data.active_players[0]},{data.active_players[1]}!{",".join(turns)}!{data.dim}')
