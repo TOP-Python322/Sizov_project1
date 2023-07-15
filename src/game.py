@@ -2,10 +2,14 @@
 Основной модуль: настройка игры и игровой процесс.
 """
 
+# стандартная библиотека
+from shutil import get_terminal_size 
 # проект
 import players
 import data
 import utils
+
+wins = utils.generator_wins()
 
 def mode():
     """Определяет режим игры"""
@@ -38,7 +42,7 @@ def mode():
             print('Некоректный ввод!')
     
     while True: 
-        token = input(f'Введите токен которым будет играть {data.active_players[0]} (X или O): ')  
+        token = input(f'Введите токен которым будет играть {data.active_players[0]} (X или O): ').upper()  
         if token in data.TOKENS:
             if token == data.TOKENS[1]:
                 data.active_players[0],data.active_players[1] = data.active_players[1], data.active_players[0]        
@@ -64,12 +68,13 @@ def game() -> list[str] | None:
             get_bot_turn()
         else:
             get_human_turn(data.TOKENS[parity])
-            
-#        print(data.turns)   
-        print_board()    
+        
+        print_board(parity)    
+        # проверка на выигрыш, делать здесь или в ходе игрока? 
+
         # шаги 11–13
-    print('\nПартия закончена.\n')    
-    return False    
+    print('\nПартия закончена. Ничья\n')    
+    return []    
         
 def get_human_turn(token: str):
     """Запрашивает и выполняет ход игрока"""
@@ -88,6 +93,12 @@ def get_bot_turn():
     pass  
 
 
-def print_board():
+def print_board(step: int):
     """Выводит игровое поле с выводом ходов"""
-    print(data.field_template.format(*data.board.values()))
+    max_width = max(len(str(n)) for n in data.all_cells_range)
+    coords = [f'{n:>{max_width}}' for n in data.all_cells_range]
+    padding = get_terminal_size().columns - (max_width+3)*data.dim*2
+    if step :
+        print(utils.concatenate_lines(utils.generator_field(max_width).format(*coords), data.field_template.format(*data.board.values()), padding = padding))
+    else:
+        print(utils.concatenate_lines(data.field_template.format(*data.board.values()), utils.generator_field(max_width).format(*coords), padding = padding))

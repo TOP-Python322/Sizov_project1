@@ -47,6 +47,7 @@ dim: int = 3
 
 dim_range: range = range(dim)
 all_cells: int = dim**2
+all_cells_range: range = range(all_cells)
 
 field_template: str = None
 
@@ -54,3 +55,5 @@ TOKENS = ('X', 'O')
 
 turns: dict[int, str] = {}
 board: dict[int, str] = dict.fromkeys(range(all_cells), ' ')
+
+wins = {}
