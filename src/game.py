@@ -62,7 +62,7 @@ def game() -> list[str] | None:
     for t in range(len(data.turns), data.all_cells):
         # индекс-указатель на игрока и токен
         parity = t % 2
-        print(f'ход игрока {data.active_players[parity]}')
+        print(f'Ход игрока {data.active_players[parity]}')
         # если ход бота
         if data.active_players[parity].startswith('#'):
             get_bot_turn()
@@ -71,7 +71,11 @@ def game() -> list[str] | None:
         
         print_board(parity)    
         # проверка на выигрыш, делать здесь или в ходе игрока? 
-
+        # проверка на выигрыш
+        for comb in wins:
+            if comb <= set(data.turns[parity::2]):
+                print(f'\nПобеждает {data.active_players[parity]}\n')
+                return [data.active_players[parity],data.active_players[1-parity]]
         # шаги 11–13
     print('\nПартия закончена. Ничья\n')    
     return []    
@@ -83,7 +87,8 @@ def get_human_turn(token: str):
         if step in data.turns or step not in range(data.all_cells):
             print("Ход не допустим! ")
         else:
-            data.turns[step] = token
+            #data.turns[step] = token
+            data.turns.append(step)
             data.board[step] = token
             break
 
