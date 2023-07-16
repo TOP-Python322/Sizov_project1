@@ -123,12 +123,48 @@ def print_board(step: int):
         print(utils.concatenate_lines(utils.generator_field(max_width).format(*coords), data.field_template.format(*data.board.values()), padding = padding))
     else:
         print(utils.concatenate_lines(data.field_template.format(*data.board.values()), utils.generator_field(max_width).format(*coords), padding = padding))
+        
+        
+def read_saves():    
+    """Читает файл и помещает данные в структуру данных сохраненных партий"""
+    # читаем файл с сохраненными записями и парсит данные
+    with open(data.SAVES_DB_PATH, 'r', encoding='utf-8') as filein:
+        for line in filein:
+            record = line.split("!")
+            users = record[0].split(",")
+            turns = list(map(int, record[1].split(",")))
+            dim = int(record[2])
+            saves = {}
+            saves['X'] = users[0]
+            saves['turns'] = turns
+            saves['dim'] = dim
+            data.saves_db[frozenset({users[0], users[1]})] = saves  
 
 
 def save():
     """Сохраняет текущую партию"""
-    turns = []
-    for n in data.turns:
-        turns += [str(n)]
-    with open(data.SAVES_DB_PATH, 'a', encoding='utf-8') as fileout:
-        fileout.write(f'{data.active_players[0]},{data.active_players[1]}!{",".join(turns)}!{data.dim}')
+    # читаем файл с сохраненными записями и обновляем структуру данных
+    read_saves()
+    
+    # обновляем данные
+    data.saves_db[frozenset({data.active_players[0], data.active_players[1]})] = {
+        'X' : data.active_players[0], 
+        'turns' : data.turns, 
+        'dim' : data.dim 
+    }
+
+    record = ''
+    for key, value in data.saves_db.items():
+        users = []
+        for user in key:
+            users += [user]
+        
+        turns = []
+        for n in value['turns']:
+            turns += [str(n)]
+        record += f'{users[0]},{users[1]}!{",".join(turns)}!{value["dim"]}\n'  
+    with open(data.SAVES_DB_PATH, 'w', encoding='utf-8') as fileout:
+        fileout.write(record)            
+
+#    with open(data.SAVES_DB_PATH, 'a', encoding='utf-8') as fileout:
+#        fileout.write(f'{data.active_players[0]},{data.active_players[1]}!{",".join(turns)}!{data.dim}')    
