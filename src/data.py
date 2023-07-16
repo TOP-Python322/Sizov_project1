@@ -19,6 +19,8 @@ name_pattern = compile(r'[a-zA-Zа-яА-Я][а-яА-Я\w]+')
 # база игроков - имена и статистика игроков 
 players_db: dict[str, dict[str, int]] = {}
 
+# база сохраненных партий
+saves_db: dict = {}
 
 COMMANDS = {
     'помощь': ('help', 'помощь'),
