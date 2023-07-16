@@ -81,7 +81,9 @@ def update_dim():
     data.dim = dim
     data.dim_range = range(dim)
     data.all_cells = dim**2
+    data.all_cells_range = range(data.all_cells)
     data.field_template = generator_field()
+    data.board = dict.fromkeys(range(data.all_cells), ' ')
  
  
 def game_over():
