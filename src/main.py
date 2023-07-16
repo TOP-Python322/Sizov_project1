@@ -29,9 +29,16 @@ while True:
     
     if command in data.COMMANDS['новая партия']:
         game.mode()
-        result = game.game()
-        if result:
-            players.update(result)
+        
+        while True:
+            result = game.game()
+            if result:
+                players.update(result)
+            
+            # запрашиваем повтор партии
+            if not game.repeat():
+                break
+            
         # очищаем данные от значений прошедшей партии
         utils.clear()
     

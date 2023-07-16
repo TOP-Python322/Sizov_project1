@@ -26,10 +26,10 @@ def mode():
             
         # если один игрок то запрашиваем уровень бота
         elif number == 1:    
-            bot_level = input('Введите уровень бота (l- легкий, h - сложный): ')
+            bot_level = input('\nВведите уровень бота (l - легкий, h - сложный): ')
             while bot_level != 'l' and bot_level != 'h':
                 print('Некоректный ввод!')
-                bot_level = input('Введите уровень бота (l- легкий, h - сложный): ')
+                bot_level = input('\nВведите уровень бота (l - легкий, h - сложный): ')
                 
             if bot_level == 'l':
                 data.active_players += ["#1"] 
@@ -109,7 +109,7 @@ def get_bot_turn(token: str, level: str):
     if level == 'l':
         step_bot = bot.game_low()
         data.turns.append(step_bot)
-        data.board[step_bot] = token  
+        data.board[step_bot] = token 
     else:
         print('\n !!!!!! Режим не реализован !!!!!!\n')
 
@@ -164,7 +164,23 @@ def save():
             turns += [str(n)]
         record += f'{users[0]},{users[1]}!{",".join(turns)}!{value["dim"]}\n'  
     with open(data.SAVES_DB_PATH, 'w', encoding='utf-8') as fileout:
-        fileout.write(record)            
-
+        fileout.write(record)          
 #    with open(data.SAVES_DB_PATH, 'a', encoding='utf-8') as fileout:
-#        fileout.write(f'{data.active_players[0]},{data.active_players[1]}!{",".join(turns)}!{data.dim}')    
+#        fileout.write(f'{data.active_players[0]},{data.active_players[1]}!{",".join(turns)}!{data.dim}')   
+
+
+def repeat() -> bool:
+    """Запрашивает запуск новой партии с теми же настройками"""
+    
+    repeat = input('Хотите повторить партию? (y - да, n - нет) ')
+    while repeat not in ['y', 'n']:
+        print('Некорректный ввод!')
+        repeat = input("Введите 'y' если хотите повторить партию, или 'n' если хотите выйти в главное меню. ")
+        
+    if repeat == 'y':
+        data.turns = [] # data.turns.clear() или так, узнать как лучше
+        data.board = dict.fromkeys(range(data.all_cells), ' ')
+        data.field_template = ''
+        return True
+        
+    return False    
