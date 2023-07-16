@@ -10,7 +10,7 @@ import data
 import utils
 import bot
 
-wins = utils.generator_wins()
+#wins = utils.generator_wins()
 
 def mode():
     """Определяет режим игры"""
@@ -58,6 +58,7 @@ def game() -> list[str] | None:
     
     Возвращает список имён в формате ['имя_выигравшего', 'имя_проигравшего'], пустой список для ничьей или None, если партия не завершена.
    """
+    data.wins = utils.generator_wins()
     data.field_template = utils.generator_field()
     #  Цикл до максимального количества ходов
     for t in range(len(data.turns), data.all_cells):
@@ -75,7 +76,7 @@ def game() -> list[str] | None:
         
         print_board(parity)    
         # проверка на выигрыш
-        for comb in wins:
+        for comb in data.wins:
             if comb <= set(data.turns[parity::2]):
                 print(f'\nПобеждает {data.active_players[parity]}\n')
                 return [data.active_players[parity],data.active_players[1-parity]]

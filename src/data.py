@@ -59,3 +59,5 @@ TOKENS = ('X', 'O')
 turns: dict[int] = []
 board: dict[int, str] = dict.fromkeys(range(all_cells), ' ')
 
+# список множеств победных комбинаций
+wins : dict = {}
