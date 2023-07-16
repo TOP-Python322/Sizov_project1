@@ -57,6 +57,9 @@ while True:
     
     elif command in data.COMMANDS['размер поля']:
         utils.update_dim()
+        
+    elif command in data.COMMANDS['помощь']:
+        help.show_help()    
     
     elif command in data.COMMANDS['выход']:
         break
