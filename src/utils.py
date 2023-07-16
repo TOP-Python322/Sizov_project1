@@ -116,7 +116,7 @@ def clear():
     data.turns = [] # data.turns.clear() или так, узнать как лучше
     data.board = dict.fromkeys(range(data.all_cells), ' ')
     data.active_players = [data.authorized_player]
-    field_template = ''
+    data.field_template = ''
     
     
 def read_saves():    
