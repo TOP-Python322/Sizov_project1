@@ -120,25 +120,7 @@ def clear():
     data.turns = [] # data.turns.clear() или так, узнать как лучше
     data.board = dict.fromkeys(range(data.all_cells), ' ')
     data.active_players = [data.authorized_player]
-    data.field_template = ''
-    
-    
-def read_saves():    
-    """Читает файл и помещает данные в структуру данных сохраненных партий"""
-    # читаем файл с сохраненными записями
-    with open(data.SAVES_DB_PATH, 'r', encoding='utf-8') as filein:
-        for line in filein:
-            record = line.split("!")
-            users = record[0].split(",")
-            turns = list(map(int, record[1].split(",")))
-            dim = int(record[2])
-            saves = {}
-            saves['X'] = users[0]
-            saves['turns'] = turns
-            saves['dim'] = dim
-            data.saves_db[frozenset({users[0], users[1]})] = saves
-    # для проверки выводим результат        
-    print(data.saves_db)        
+    data.field_template = ''       
     
     
 def show_field():
