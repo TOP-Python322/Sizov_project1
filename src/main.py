@@ -38,6 +38,8 @@ while True:
                 # запрашиваем повтор партии
                 if not game.repeat():
                     break
+            else:
+                break
             
         # очищаем данные от значений прошедшей партии
         utils.clear()
