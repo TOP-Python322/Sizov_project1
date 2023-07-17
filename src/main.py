@@ -32,7 +32,7 @@ while True:
         
         while True:
             result = game.game()
-            if result:
+            if result != None:
                 players.update(result)
             
             # запрашиваем повтор партии

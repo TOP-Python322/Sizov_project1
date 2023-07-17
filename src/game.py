@@ -72,7 +72,7 @@ def game() -> list[str] | None:
             if get_human_turn(data.TOKENS[parity]):
                 # сохраняем текущую партию и выходим в главное меню
                 save()
-                return []
+                return None
         
         print_board(parity)    
         # проверка на выигрыш
