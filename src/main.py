@@ -49,7 +49,7 @@ while True:
 
     elif command in data.COMMANDS['авторизация']:
         # переключаемся на другого игрока
-        data.authorized_player = ''
+        data.authorized_player = None
         data.active_players = []
         players.get_name() 
     

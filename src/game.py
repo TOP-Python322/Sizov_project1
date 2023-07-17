@@ -193,10 +193,40 @@ def repeat() -> bool:
 def load():
     """Загрузка сохраненных партий и инициция игры перед ее возобновлением"""    
     read_saves()
+    print(data.saves_db)
     print('-----данный раздел до конца не реализован-----')
-    save_slots = [
-        (players_set - {data.authorized_player}).pop()
-        for players_set in data.saves_db
-        if data.authorized_player in players_set
-    ]
+#    save_slots = [
+#        (players_set - {data.authorized_player}).pop()
+#        for players_set in data.saves_db
+#        if data.authorized_player in players_set
+#    ]
+    save_slots = []
+    for players_set in data.saves_db:
+        if data.authorized_player in players_set:
+            save_slots += [players_set]    
+    print(len(save_slots))
     print(save_slots)
+    # если записей нет то выводим сообщение и выходим
+    if len(save_slots) == 0:
+        print(f'Для игрока {data.authorized_player} записи не обнаружены.')
+        return
+    # если для текущего игрока доступно несколько записей
+    if len(save_slots) > 1:
+        print(f'Для игрока {data.authorized_player} доступны незавершенные партии со следующими игроками')
+        print(save_slots)
+    print('Загружаем партию')
+    record = data.saves_db[save_slots[0]]
+    print(record)
+    # востанавливаем настройки игры
+    # если сетка не совпадает, то перенастраиваем игровое поле
+    if record['dim'] != data.dim:
+        data.dim = record['dim']
+        update_dim()
+    # загружаем сделанные ходы
+    data.turns = record['turns']   
+    # востанавливаем список игроков
+    data.active_players = [record['X']]
+    
+    print(f'dim = {data.dim}')
+    print(f'turns = {data.turns}')
+    print(f'players = {data.active_players}')
