@@ -186,4 +186,10 @@ def repeat() -> bool:
         data.field_template = ''
         return True
         
-    return False    
+    return False  
+
+
+def load():
+    """Загрузка сохраненных партий и инициция игры перед ее возобновлением"""    
+    read_saves()
+    print('-----данный раздел до конца не реализован-----')
