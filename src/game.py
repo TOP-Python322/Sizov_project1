@@ -60,6 +60,8 @@ def game() -> list[str] | None:
    """
     data.wins = utils.generator_wins()
     data.field_template = utils.generator_field()
+    # выводим координатную сетку перед первым ходом
+    utils.show_field()
     #  Цикл до максимального количества ходов
     for t in range(len(data.turns), data.all_cells):
         # индекс-указатель на игрока и токен

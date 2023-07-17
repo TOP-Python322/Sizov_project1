@@ -84,6 +84,8 @@ def update_dim():
     data.all_cells_range = range(data.all_cells)
     data.field_template = generator_field()
     data.board = dict.fromkeys(range(data.all_cells), ' ')
+    # выводим координатную сетку с новыми настройками
+    show_field()
  
  
 def game_over():
