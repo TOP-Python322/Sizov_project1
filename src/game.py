@@ -61,6 +61,7 @@ def game() -> list[str] | None:
     data.wins = utils.generator_wins()
     data.field_template = utils.generator_field()
     # выводим координатную сетку перед первым ходом
+    print('\nИгровое поле:')
     utils.show_field()
     #  Цикл до максимального количества ходов
     for t in range(len(data.turns), data.all_cells):
@@ -193,3 +194,9 @@ def load():
     """Загрузка сохраненных партий и инициция игры перед ее возобновлением"""    
     read_saves()
     print('-----данный раздел до конца не реализован-----')
+    save_slots = [
+        (players_set - {data.authorized_player}).pop()
+        for players_set in data.saves_db
+        if data.authorized_player in players_set
+    ]
+    print(save_slots)

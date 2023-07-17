@@ -127,4 +127,4 @@ def show_field():
     """Отображает координатную сетку"""
     max_width = max(len(str(n)) for n in data.all_cells_range)
     coords = [f'{n:>{max_width}}' for n in data.all_cells_range]
-    print(f'\nКоординатная сетка:\n{generator_field(max_width).format(*coords)}\n')
+    print(f'{generator_field(max_width).format(*coords)}\n')
