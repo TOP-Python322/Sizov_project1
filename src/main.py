@@ -35,9 +35,9 @@ while True:
             if result != None:
                 players.update(result)
             
-            # запрашиваем повтор партии
-            if not game.repeat():
-                break
+                # запрашиваем повтор партии
+                if not game.repeat():
+                    break
             
         # очищаем данные от значений прошедшей партии
         utils.clear()
