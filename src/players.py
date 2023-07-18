@@ -29,7 +29,7 @@ def get_name() -> str:
     data.active_players += [name]      
         
 
-def update(gamers: list[str]):
+def update(gamers: list[str]) -> None:
     """Обновляет статистику и записыает в файл"""
     # если не ничья
     if len(gamers) > 0:
