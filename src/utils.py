@@ -48,7 +48,7 @@ def generator_wins() -> list:
     return out
 
 
-def print_statistics():
+def print_statistics() -> None:
     """ Выводит таблицу результатов с именами и статистикой игроков"""
     # Добавить сортировку по колличеству побед
     max_width = max(len(n) for n in data.players_db) +2
@@ -67,7 +67,7 @@ def print_statistics():
         print(f'|{"-"*width}|')
 
     
-def update_dim():
+def update_dim() -> None:
     """ Обновляет размер поля"""    
 #    добавить здесь обработку исключения на некорректный ввод
     while True:
@@ -88,12 +88,12 @@ def update_dim():
     show_field()
  
  
-def game_over():
+def game_over() -> None:
     """Действия перед завершением работы приложения"""
     print('GAME OVER') 
     
     
-def error_command():
+def error_command() -> None:
     """ Выводит сообщение о не правильной команде"""   
     print('Такой команды нет!')  
 
@@ -114,16 +114,16 @@ def concatenate_lines(
     ) 
 
 
-def clear():
+def clear() -> None:
     """Очищает результат партии. 
     Возвращение списка активных игроков к состоянию до ввода команды new, сброс структуры данных для ходов"""    
     data.turns = [] # data.turns.clear() или так, узнать как лучше
-    data.board = dict.fromkeys(range(data.all_cells), ' ')
+    data.board = dict.fromkeys(range(data.all_cells), ' ') #!!!!!!!!
     data.active_players = [data.authorized_player]
-    data.field_template = ''       
+    data.field_template = ''     #!!!!!!!!  
     
     
-def show_field():
+def show_field() -> None:
     """Отображает координатную сетку"""
     max_width = max(len(str(n)) for n in data.all_cells_range)
     coords = [f'{n:>{max_width}}' for n in data.all_cells_range]
