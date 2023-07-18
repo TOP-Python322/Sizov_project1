@@ -34,15 +34,13 @@ def update(gamers: list[str]):
     # если не ничья
     if len(gamers) > 0:
         # победитель
-        gamer = gamers[0]
         # если игрок не бот
-        if not gamer.startswith('#'):
-            data.players_db[gamer]['wins'] += 1
+        if not gamers[0].startswith('#'):
+            data.players_db[gamers[0]]['wins'] += 1
         # проигравший
-        gamer = gamers[1]
         # если игрок не бот
-        if not gamer.startswith('#'):
-            data.players_db[gamer]['fails'] += 1    
+        if not gamers[1].startswith('#'):
+            data.players_db[gamers[1]]['fails'] += 1    
 
     else:
         for gamer in data.active_players:
