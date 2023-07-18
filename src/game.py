@@ -216,7 +216,15 @@ def load() -> bool:
         print(f'Для игрока {data.authorized_player} доступны незавершенные партии со следующими игроками: ')
         for index, player in enumerate(save_slots):
             print(f'{player} -  индекс {index}')
-        index_save = int(input('Введите индекс игрока с которым хотите возобновить партию: '))
+        
+        while True:   
+            index_save = input('Введите индекс игрока с которым хотите возобновить партию: ')
+            if index_save.isdigit():
+                index_save = int(index_save)
+                if index_save < len(save_slots):
+                    break
+            print(data.MESSAGES['недопустимое значение'])
+            
     # востанавливаем список игроков
     players = frozenset({data.authorized_player, save_slots[index_save]})
 
