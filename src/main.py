@@ -34,7 +34,7 @@ while True:
         utils.show_field()      
         while True:
             result = game.game()
-            if result != None:
+            if result is not None :  
                 players.update(result)
             
                 # запрашиваем повтор партии
