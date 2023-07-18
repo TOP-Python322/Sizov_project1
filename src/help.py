@@ -8,7 +8,7 @@ from shutil import get_terminal_size
 import data
 import utils
 
-def show_title():
+def show_title() -> None:
     """Выводит заголовок игры"""
     width = get_terminal_size().columns - 3
     title = f'\n#{"="*width}#\n#{" "*width}#\n#'
@@ -17,13 +17,13 @@ def show_title():
     title += f'#\n#{" "*width}#\n#{"="*width}#\n'    
     print(title)
     
-def commands_help():
+def commands_help() -> None:
     """Отображает доступные команды"""
     print('В игре доступны следующие команды:')
     for command, value in data.COMMANDS.items():
         print(f'\t-{command} - {value[0]} или {value[1]};')
         
-def show_help():
+def show_help() -> None:
     """Выводит справку по игре"""  
     #справка целиком состоит из нескольких частей: описание игры, описание интерфейса, список команд главного меню, координатная сетка
     width = get_terminal_size().columns

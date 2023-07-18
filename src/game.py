@@ -12,7 +12,7 @@ import bot
 
 #wins = utils.generator_wins()
 
-def mode():
+def mode() -> None:
     """Определяет режим игры"""
     
     while True:
@@ -115,7 +115,7 @@ def get_human_turn(token: str) -> bool:
             print(data.MESSAGES['недопустимое значение'])
 
 
-def get_bot_turn(token: str, level: str):
+def get_bot_turn(token: str, level: str) -> None:
     """Генерирует ход бота.
     Передается токен которым играет бот и уровень сложности"""
     if level == 'l':
@@ -126,7 +126,7 @@ def get_bot_turn(token: str, level: str):
         print('\n !!!!!! Режим не реализован !!!!!!\n')
 
 
-def print_board(step: int):
+def print_board(step: int) -> None:
     """Выводит игровое поле с выводом ходов"""
     max_width = max(len(str(n)) for n in data.all_cells_range)
     coords = [f'{n:>{max_width}}' for n in data.all_cells_range]
@@ -137,7 +137,7 @@ def print_board(step: int):
         print(utils.concatenate_lines(data.field_template.format(*data.board.values()), utils.generator_field(max_width).format(*coords), padding = padding))
         
         
-def read_saves():    
+def read_saves() -> None:    
     """Читает файл и помещает данные в структуру данных сохраненных партий"""
     # читаем файл с сохраненными записями и парсит данные
     with open(data.SAVES_DB_PATH, 'r', encoding='utf-8') as filein:
@@ -153,17 +153,8 @@ def read_saves():
             data.saves_db[frozenset({users[0], users[1]})] = saves  
 
 
-def save():
+def save() -> None:
     """Сохраняет текущую партию"""
-    # читаем файл с сохраненными записями и обновляем структуру данных
-#    read_saves()
-    
-    # обновляем данные
-#    data.saves_db[frozenset({data.active_players[0], data.active_players[1]})] = {
-#        'X' : data.active_players[0], 
-#        'turns' : data.turns, 
-#        'dim' : data.dim 
- #   }
 
     record = ''
     for key, value in data.saves_db.items():
@@ -252,7 +243,7 @@ def load() -> bool:
     return True    
 
 
-def delete():
+def delete() -> None:
     """Удаляет запись о не сохраненной партии после ее завершения"""
     # читаем файл с сохраненными записями и обновляем структуру данных
     read_saves()
