@@ -60,13 +60,11 @@ def game() -> list[str] | None:
    """
     data.wins = utils.generator_wins()
     data.field_template = utils.generator_field()
-    # выводим координатную сетку перед первым ходом
-    print('\nИгровое поле:')
-    utils.show_field()
+
     #  Цикл до максимального количества ходов
-    for t in range(len(data.turns), data.all_cells):
+    for step in range(len(data.turns), data.all_cells):
         # индекс-указатель на игрока и токен
-        parity = t % 2
+        parity = step % 2
         print(f'\nХод игрока {data.active_players[parity]}')
         # если ход бота
         if data.active_players[parity].startswith('#'):
@@ -74,7 +72,16 @@ def game() -> list[str] | None:
         else:
             if get_human_turn(data.TOKENS[parity]):
                 # сохраняем текущую партию и выходим в главное меню
+                # читаем файл с сохраненными записями
+                read_saves()
+                # обновляем данные
+                data.saves_db[frozenset({data.active_players[0], data.active_players[1]})] = {
+                    'X' : data.active_players[0], 
+                    'turns' : data.turns, 
+                    'dim' : data.dim 
+                }
                 save()
+                print()
                 return None
         
         print_board(parity)    
@@ -88,7 +95,8 @@ def game() -> list[str] | None:
  
  
 def get_human_turn(token: str) -> bool:
-    """Запрашивает и выполняет ход игрока"""
+    """Запрашивает и выполняет ход игрока. 
+      Возвращает True при принудительном завершении партии"""
     while True: 
         step = input('Введите номер клетки: ')
         # если пустой ввод, то завершаем партию с сохранением
@@ -123,7 +131,7 @@ def print_board(step: int):
     max_width = max(len(str(n)) for n in data.all_cells_range)
     coords = [f'{n:>{max_width}}' for n in data.all_cells_range]
     padding = get_terminal_size().columns - (max_width+3)*data.dim*2
-    if step :
+    if step == 1:
         print(utils.concatenate_lines(utils.generator_field(max_width).format(*coords), data.field_template.format(*data.board.values()), padding = padding))
     else:
         print(utils.concatenate_lines(data.field_template.format(*data.board.values()), utils.generator_field(max_width).format(*coords), padding = padding))
@@ -148,14 +156,14 @@ def read_saves():
 def save():
     """Сохраняет текущую партию"""
     # читаем файл с сохраненными записями и обновляем структуру данных
-    read_saves()
+#    read_saves()
     
     # обновляем данные
-    data.saves_db[frozenset({data.active_players[0], data.active_players[1]})] = {
-        'X' : data.active_players[0], 
-        'turns' : data.turns, 
-        'dim' : data.dim 
-    }
+#    data.saves_db[frozenset({data.active_players[0], data.active_players[1]})] = {
+#        'X' : data.active_players[0], 
+#        'turns' : data.turns, 
+#        'dim' : data.dim 
+ #   }
 
     record = ''
     for key, value in data.saves_db.items():
@@ -168,9 +176,7 @@ def save():
             turns += [str(n)]
         record += f'{users[0]},{users[1]}!{",".join(turns)}!{value["dim"]}\n'  
     with open(data.SAVES_DB_PATH, 'w', encoding='utf-8') as fileout:
-        fileout.write(record)          
-#    with open(data.SAVES_DB_PATH, 'a', encoding='utf-8') as fileout:
-#        fileout.write(f'{data.active_players[0]},{data.active_players[1]}!{",".join(turns)}!{data.dim}')   
+        fileout.write(record)           
 
 
 def repeat() -> bool:
@@ -190,43 +196,59 @@ def repeat() -> bool:
     return False  
 
 
-def load():
+def load() -> bool:
     """Загрузка сохраненных партий и инициция игры перед ее возобновлением"""    
     read_saves()
-    print(data.saves_db)
-    print('-----данный раздел до конца не реализован-----')
-#    save_slots = [
-#        (players_set - {data.authorized_player}).pop()
-#        for players_set in data.saves_db
-#        if data.authorized_player in players_set
-#    ]
-    save_slots = []
-    for players_set in data.saves_db:
-        if data.authorized_player in players_set:
-            save_slots += [players_set]    
-    print(len(save_slots))
-    print(save_slots)
+
+    save_slots = [
+       set(players_set - {data.authorized_player}).pop()
+        for players_set in data.saves_db
+        if data.authorized_player in players_set
+    ]
+
     # если записей нет то выводим сообщение и выходим
     if len(save_slots) == 0:
         print(f'Для игрока {data.authorized_player} записи не обнаружены.')
-        return
+        return False
+    index_save = 0
     # если для текущего игрока доступно несколько записей
     if len(save_slots) > 1:
-        print(f'Для игрока {data.authorized_player} доступны незавершенные партии со следующими игроками')
-        print(save_slots)
-    print('Загружаем партию')
-    record = data.saves_db[save_slots[0]]
-    print(record)
+        print(f'Для игрока {data.authorized_player} доступны незавершенные партии со следующими игроками: ')
+        for index, player in enumerate(save_slots):
+            print(f'{player} -  индекс {index}')
+        index_save = int(input('Введите индекс игрока с которым хотите возобновить партию: '))
+    # востанавливаем список игроков
+    players = frozenset({data.authorized_player, save_slots[index_save]})
+
+    # берем нужную запись
+    record = data.saves_db[players]
+
+    data.active_players = [record['X'], set(players - {record['X']}).pop()]
+    # загружаем сделанные ходы
+    data.turns = record['turns'] 
     # востанавливаем настройки игры
     # если сетка не совпадает, то перенастраиваем игровое поле
     if record['dim'] != data.dim:
         data.dim = record['dim']
-        update_dim()
-    # загружаем сделанные ходы
-    data.turns = record['turns']   
-    # востанавливаем список игроков
-    data.active_players = [record['X']]
+        utils.update_dim()
     
-    print(f'dim = {data.dim}')
-    print(f'turns = {data.turns}')
-    print(f'players = {data.active_players}')
+    # востанавливаем поле со сделанными ходами
+    data.field_template = utils.generator_field()
+    for index, value in enumerate(data.turns):
+        data.board[value] = data.TOKENS[index%2]
+   
+    # выводим игровое поле с последними ходами если они были сделаны
+    if len(data.turns) > 0:
+        print_board((len(data.turns) + 1)%2) 
+        
+    return True    
+
+
+def delete():
+    """Удаляет запись о не сохраненной партии после ее завершения"""
+    # читаем файл с сохраненными записями и обновляем структуру данных
+    read_saves()
+    # удаляем запись
+    data.saves_db.pop(frozenset({data.active_players[0], data.active_players[1]}))
+    # обновляем файл
+    save()

@@ -29,7 +29,9 @@ while True:
     
     if command in data.COMMANDS['новая партия']:
         game.mode()
-        
+        # выводим координатную сетку перед первым ходом
+        print('\nИгровое поле:')  
+        utils.show_field()      
         while True:
             result = game.game()
             if result != None:
@@ -45,7 +47,15 @@ while True:
         utils.clear()
     
     elif command in data.COMMANDS['загрузка']:
-        game.load()
+        if game.load():
+            # запускаем игру с загруженными параметрами
+            result = game.game()
+            if result != None:
+                players.update(result)
+                # удаляем сохраненную запись 
+                game.delete() 
+            # очищаем данные от значений прошедшей партии
+            utils.clear()   
 
     elif command in data.COMMANDS['авторизация']:
         # переключаемся на другого игрока
