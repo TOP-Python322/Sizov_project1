@@ -32,11 +32,9 @@ def mode() -> None:
                 bot_level = input(data.MESSAGES['уровень бота'])
                 
             if bot_level == 'l':
-                data.active_players += ["#1"] 
-                
+                data.active_players += ["#1"]                 
             else:
-                data.active_players += ["#2"] 
-                
+                data.active_players += ["#2"]                 
             break    
 
         else:
@@ -69,22 +67,28 @@ def game() -> list[str] | None:
         print(f'\nХод игрока {data.active_players[parity]}')
         # если ход бота
         if data.active_players[parity].startswith('#'):
-            get_bot_turn(data.TOKENS[parity], 'l' if data.active_players[parity] == '#1' else 'h')
+            step = get_bot_turn(parity)
+#            get_bot_turn(data.TOKENS[parity], 'l' if data.active_players[parity] == '#1' else 'h')
         else:
-            if get_human_turn(data.TOKENS[parity]):
-                # сохраняем текущую партию и выходим в главное меню
-                # читаем файл с сохраненными записями
-                read_saves()
-                # обновляем данные
-                data.saves_db[frozenset({data.active_players[0], data.active_players[1]})] = {
-                    'X' : data.active_players[0], 
-                    'turns' : data.turns, 
-                    'dim' : data.dim 
-                }
-                save()
-                print()
-                return None
-        
+            step = get_human_turn()
+            
+        if step is  None:    
+            # сохраняем текущую партию и выходим в главное меню
+            # читаем файл с сохраненными записями
+            read_saves()
+            # обновляем данные
+            data.saves_db[frozenset({data.active_players[0], data.active_players[1]})] = {
+                'X' : data.active_players[0], 
+                'turns' : data.turns, 
+                'dim' : data.dim 
+            }
+            # сохраняем
+            save()
+            print()
+            return None
+        # обновляем список ходов и игровое поле
+        data.turns.append(step)
+        data.board[step] = data.TOKENS[parity]
         print_board(parity)    
         # проверка на выигрыш
         for comb in data.wins:
@@ -95,14 +99,14 @@ def game() -> list[str] | None:
     return []    
  
  
-def get_human_turn(token: str) -> bool:
+def get_human_turn() -> int | None:
     """Запрашивает и выполняет ход игрока. 
-      Возвращает True при принудительном завершении партии"""
+      Возвращает None при принудительном завершении партии, или номер ячейки"""
     while True: 
         step = input(data.MESSAGES['ввод хода'])
         # если пустой ввод, то завершаем партию с сохранением
         if step == '':
-            return(True)
+            return(None)
         try:
             step = int(step)
         except ValueError:
@@ -111,31 +115,16 @@ def get_human_turn(token: str) -> bool:
             if step in data.turns or step not in range(data.all_cells):
                 print(data.MESSAGES['ход недопустим'])
             else:
-                data.turns.append(step)
-                data.board[step] = token
-                return(False)
-                
-#        if step.isdigit():
-#            step = int(step)
-#            if step in data.turns or step not in range(data.all_cells):
-#                print("Ход не допустим! ")
-#            else:
-#                data.turns.append(step)
-#                data.board[step] = token
-#                return(False)
-#        else:
-#            print(data.MESSAGES['недопустимое значение'])
+                return(step)            
 
 
-def get_bot_turn(token: str, level: str) -> None:
+def get_bot_turn(bot_index: int) -> int:
     """Генерирует ход бота.
     Передается токен которым играет бот и уровень сложности"""
-    if level == 'l':
-        step_bot = bot.game_low()
-        data.turns.append(step_bot)
-        data.board[step_bot] = token 
-    else:
-        print('\n !!!!!! Режим не реализован !!!!!!\n')
+#    if level == 'l':
+    return(bot.game_low())
+#    else:
+ #       print('\n !!!!!! Режим не реализован !!!!!!\n')
 
 
 def print_board(step: int) -> None:
