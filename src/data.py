@@ -3,6 +3,7 @@
 """
 
 # стандартная библиотека
+from collections.abc import Callable
 from pathlib import Path
 from re import compile
 from sys import path
@@ -49,6 +50,7 @@ MESSAGES = {
 
 authorized_player: str = None
 active_players: list[str] = []
+get_bot_turn: Callable = None
 
 # размер поля
 dim: int = 3

@@ -32,9 +32,11 @@ def mode() -> None:
                 bot_level = input(data.MESSAGES['уровень бота'])
                 
             if bot_level == 'l':
-                data.active_players += ["#1"]                 
+                data.active_players += ["#1"]   
+                data.get_bot_turn = bot.easy
             else:
-                data.active_players += ["#2"]                 
+                data.active_players += ["#2"]   
+                data.get_bot_turn = bot.hard    
             break    
 
         else:
@@ -67,8 +69,7 @@ def game() -> list[str] | None:
         print(f'\nХод игрока {data.active_players[parity]}')
         # если ход бота
         if data.active_players[parity].startswith('#'):
-            step = get_bot_turn(parity)
-#            get_bot_turn(data.TOKENS[parity], 'l' if data.active_players[parity] == '#1' else 'h')
+            step = data.get_bot_turn(parity)      #get_bot_turn(parity)
         else:
             step = get_human_turn()
             
@@ -118,13 +119,10 @@ def get_human_turn() -> int | None:
                 return(step)            
 
 
-def get_bot_turn(bot_index: int) -> int:
-    """Генерирует ход бота.
-    Передается токен которым играет бот и уровень сложности"""
-#    if level == 'l':
-    return(bot.game_low())
-#    else:
- #       print('\n !!!!!! Режим не реализован !!!!!!\n')
+#def get_bot_turn(bot_index: int) -> int:
+#    """Генерирует ход бота."""
+#    return(bot.game_low())
+
 
 
 def print_board(step: int) -> None:
