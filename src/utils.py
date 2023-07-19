@@ -8,6 +8,7 @@ from shutil import get_terminal_size
 from operator import itemgetter
 # проект
 import data
+import help
 
 
 def read_ini() -> dict:
@@ -103,6 +104,7 @@ def game_over() -> None:
 def error_command() -> None:
     """ Выводит сообщение о не правильной команде"""   
     print(data.MESSAGES['ошибка команды'])  
+    help.commands_help()
 
 
 def concatenate_lines(

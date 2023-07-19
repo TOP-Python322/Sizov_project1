@@ -21,7 +21,7 @@ def commands_help() -> None:
     """Отображает доступные команды"""
     print('В игре доступны следующие команды:')
     for command, value in data.COMMANDS.items():
-        print(f'\t-{command} - {value[0]} или {value[1]};')
+        print(f'  {value[0]} или {value[1]} - {command};')
         
 def show_help() -> None:
     """Выводит справку по игре"""  
