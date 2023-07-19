@@ -5,6 +5,7 @@
 # стандартная библиотека
 from configparser import ConfigParser
 from shutil import get_terminal_size 
+from operator import itemgetter
 # проект
 import data
 
@@ -51,15 +52,24 @@ def generator_wins() -> list:
 def print_statistics() -> None:
     """ Выводит таблицу результатов с именами и статистикой игроков"""
     # Добавить сортировку по колличеству побед
+
+    sorted_db = sorted(data.players_db.values(), key=itemgetter('wins'), reverse=True)      
+    
     max_width = max(len(n) for n in data.players_db) +2
     width =  max_width + 36   
-    result = f'\n#{"="*width}#\n#'
-    result += f'{"Таблица результатов".center(width)}'   
-    result += f'#\n#{"="*width}#'    
-    print(result)
+    print(f'\n#{"="*width}#')
+    print(f'#{"Таблица результатов".center(width)}#')   
+    print(f'#{"="*width}#')    
     print(f'|{"Игрок".center(max_width)}|   Победы  | Поражения |   Ничьи   |')
     print(f'|{"-"*width}|')
-    for gamer in data.players_db:
+    dict_items = data.players_db.items()
+    gamers = []
+    for result in sorted_db:
+        print(f' --  {result} --')
+        gamers += [key for key, value in dict_items if value == result]
+
+    print(f'---------\n{gamers}\n---------')
+    for gamer in gamers:
         out = f'|{gamer.center(max_width)}|'
         for value in data.players_db[gamer].values():
             out += f'{str(value).center(11)}|'    
