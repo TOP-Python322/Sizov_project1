@@ -77,19 +77,20 @@ def update_dim() -> None:
     """ Обновляет размер поля"""    
 #    добавить здесь обработку исключения на некорректный ввод
     while True:
-        dim = int(input(data.MESSAGES['размер поля']))
-    
-        if 3<=dim <= 20:
-            break
-        else:
-            print(data.MESSAGES['недопустимое значение'])
+        try:
+            dim = int(input(data.MESSAGES['размер поля']))
+        except ValueError:
+            print(data.MESSAGES['недопустимое значение']) 
+        else:  
+            if 3<=dim <= 20:
+                break
+            else:
+                print(data.MESSAGES['некорректный размер'])
 
     data.dim = dim
     data.dim_range = range(dim)
     data.all_cells = dim**2
     data.all_cells_range = range(data.all_cells)
-    data.field_template = generator_field()
-    data.board = dict.fromkeys(range(data.all_cells), ' ')
     # выводим координатную сетку с новыми настройками
     show_field()
  
@@ -101,7 +102,7 @@ def game_over() -> None:
     
 def error_command() -> None:
     """ Выводит сообщение о не правильной команде"""   
-    print('Такой команды нет!')  
+    print(data.MESSAGES['ошибка команды'])  
 
 
 def concatenate_lines(
@@ -124,9 +125,8 @@ def clear() -> None:
     """Очищает результат партии. 
     Возвращение списка активных игроков к состоянию до ввода команды new, сброс структуры данных для ходов"""    
     data.turns = [] # data.turns.clear() или так, узнать как лучше
-    data.board = dict.fromkeys(range(data.all_cells), ' ') #!!!!!!!!
     data.active_players = [data.authorized_player]
-    data.field_template = ''     #!!!!!!!!  
+
     
     
 def show_field() -> None:

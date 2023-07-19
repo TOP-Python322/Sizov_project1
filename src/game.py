@@ -60,6 +60,7 @@ def game() -> list[str] | None:
    """
     data.wins = utils.generator_wins()
     data.field_template = utils.generator_field()
+    data.board = dict.fromkeys(range(data.all_cells), ' ')
 
     #  Цикл до максимального количества ходов
     for step in range(len(data.turns), data.all_cells):
