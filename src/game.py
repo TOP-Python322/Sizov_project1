@@ -102,17 +102,28 @@ def get_human_turn(token: str) -> bool:
         # если пустой ввод, то завершаем партию с сохранением
         if step == '':
             return(True)
-        if step.isdigit():
+        try:
             step = int(step)
+        except ValueError:
+            print(data.MESSAGES['недопустимое значение'])
+        else:
             if step in data.turns or step not in range(data.all_cells):
                 print("Ход не допустим! ")
             else:
                 data.turns.append(step)
                 data.board[step] = token
                 return(False)
-#                break
-        else:
-            print(data.MESSAGES['недопустимое значение'])
+                
+#        if step.isdigit():
+#            step = int(step)
+#            if step in data.turns or step not in range(data.all_cells):
+#                print("Ход не допустим! ")
+#            else:
+#                data.turns.append(step)
+#                data.board[step] = token
+#                return(False)
+#        else:
+#            print(data.MESSAGES['недопустимое значение'])
 
 
 def get_bot_turn(token: str, level: str) -> None:
