@@ -26,10 +26,10 @@ def mode() -> None:
             
         # если один игрок то запрашиваем уровень бота
         elif number == 1:    
-            bot_level = input('\nВведите уровень бота (l - легкий, h - сложный): ')
+            bot_level = input(data.MESSAGES['уровень бота'])
             while bot_level != 'l' and bot_level != 'h':
-                print('Некоректный ввод!')
-                bot_level = input('\nВведите уровень бота (l - легкий, h - сложный): ')
+                print(data.MESSAGES['недопустимое значение'])
+                bot_level = input(data.MESSAGES['уровень бота'])
                 
             if bot_level == 'l':
                 data.active_players += ["#1"] 
@@ -40,7 +40,7 @@ def mode() -> None:
             break    
 
         else:
-            print('Некоректный ввод!')
+            print(data.MESSAGES['недопустимое значение'])
     
     while True: 
         token = input(f'\nВведите токен которым будет играть {data.active_players[0]} (X или O): ').upper()  
@@ -50,7 +50,7 @@ def mode() -> None:
             
             break
         else:
-            print('Некоректный ввод!')  
+            print(data.MESSAGES['недопустимое значение'])  
             
            
 def game() -> list[str] | None:
@@ -90,7 +90,7 @@ def game() -> list[str] | None:
             if comb <= set(data.turns[parity::2]):
                 print(f'\nПобеждает {data.active_players[parity]}\n')
                 return [data.active_players[parity],data.active_players[1-parity]]
-    print('\nПартия закончена. Ничья\n')    
+    print(data.MESSAGES['ничья'])    
     return []    
  
  
@@ -98,17 +98,17 @@ def get_human_turn(token: str) -> bool:
     """Запрашивает и выполняет ход игрока. 
       Возвращает True при принудительном завершении партии"""
     while True: 
-        step = input('Введите номер клетки: ')
+        step = input(data.MESSAGES['ввод хода'])
         # если пустой ввод, то завершаем партию с сохранением
         if step == '':
             return(True)
         try:
             step = int(step)
         except ValueError:
-            print(data.MESSAGES['недопустимое значение'])
+            print(data.MESSAGES['ход не число'])
         else:
             if step in data.turns or step not in range(data.all_cells):
-                print("Ход не допустим! ")
+                print(data.MESSAGES['ход недопустим'])
             else:
                 data.turns.append(step)
                 data.board[step] = token
@@ -186,7 +186,7 @@ def repeat() -> bool:
     
     repeat = input('Хотите повторить партию? (y - да, n - нет) ')
     while repeat not in ['y', 'n']:
-        print('Некорректный ввод!')
+        print(data.MESSAGES['недопустимое значение'])
         repeat = input("Введите 'y' если хотите повторить партию, или 'n' если хотите выйти в главное меню. ")
         
     if repeat == 'y':
