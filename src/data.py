@@ -69,3 +69,6 @@ board: dict[int, str] = dict.fromkeys(range(all_cells), ' ')
 
 # список множеств победных комбинаций
 wins : dict = {}
+
+max_width: int = 1
+coords = []

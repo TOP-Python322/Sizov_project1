@@ -10,7 +10,6 @@ import data
 import utils
 import bot
 
-#wins = utils.generator_wins()
 
 def mode() -> None:
     """Определяет режим игры"""
@@ -58,9 +57,12 @@ def game() -> list[str] | None:
     
     Возвращает список имён в формате ['имя_выигравшего', 'имя_проигравшего'], пустой список для ничьей или None, если партия не завершена.
    """
+    # Инициализация перед началом партии
     data.wins = utils.generator_wins()
     data.field_template = utils.generator_field()
     data.board = dict.fromkeys(range(data.all_cells), ' ')
+    data.max_width = max(len(str(n)) for n in data.all_cells_range)
+    data.coords = [f'{n:>{data.max_width}}' for n in data.all_cells_range]
 
     #  Цикл до максимального количества ходов
     for step in range(len(data.turns), data.all_cells):
@@ -119,21 +121,14 @@ def get_human_turn() -> int | None:
                 return(step)            
 
 
-#def get_bot_turn(bot_index: int) -> int:
-#    """Генерирует ход бота."""
-#    return(bot.game_low())
-
-
 
 def print_board(step: int) -> None:
     """Выводит игровое поле с выводом ходов"""
-    max_width = max(len(str(n)) for n in data.all_cells_range)
-    coords = [f'{n:>{max_width}}' for n in data.all_cells_range]
-    padding = get_terminal_size().columns - (max_width+3)*data.dim*2
+    padding = get_terminal_size().columns - (data.max_width+3)*data.dim*2
     if step == 1:
-        print(utils.concatenate_lines(utils.generator_field(max_width).format(*coords), data.field_template.format(*data.board.values()), padding = padding))
+        print(utils.concatenate_lines(utils.generator_field(data.max_width).format(*data.coords), data.field_template.format(*data.board.values()), padding = padding))
     else:
-        print(utils.concatenate_lines(data.field_template.format(*data.board.values()), utils.generator_field(max_width).format(*coords), padding = padding))
+        print(utils.concatenate_lines(data.field_template.format(*data.board.values()), utils.generator_field(data.max_width).format(*data.coords), padding = padding))
         
         
 def read_saves() -> None:    
@@ -154,7 +149,6 @@ def read_saves() -> None:
 
 def save() -> None:
     """Сохраняет текущую партию"""
-
     record = ''
     for key, value in data.saves_db.items():
         users = []
@@ -170,8 +164,7 @@ def save() -> None:
 
 
 def repeat() -> bool:
-    """Запрашивает запуск новой партии с теми же настройками"""
-    
+    """Запрашивает запуск новой партии с теми же настройками"""    
     repeat = input('Хотите повторить партию? (y - да, n - нет) ')
     while repeat not in ['y', 'n']:
         print(data.MESSAGES['недопустимое значение'])
@@ -189,7 +182,7 @@ def repeat() -> bool:
 def load() -> bool:
     """Загрузка сохраненных партий и инициция игры перед ее возобновлением"""    
     read_saves()
-
+    
     save_slots = [
        set(players_set - {data.authorized_player}).pop()
         for players_set in data.saves_db
