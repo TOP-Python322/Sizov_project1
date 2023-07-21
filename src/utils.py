@@ -128,7 +128,7 @@ def clear() -> None:
     Возвращение списка активных игроков к состоянию до ввода команды new, сброс структуры данных для ходов"""    
     data.turns = [] # data.turns.clear() или так, узнать как лучше
     data.active_players = [data.authorized_player]
-
+    
     
     
 def show_field() -> None:

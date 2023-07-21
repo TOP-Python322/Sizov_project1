@@ -14,6 +14,8 @@ import bot
 def mode() -> None:
     """Определяет режим игры"""
     
+    data.board = dict.fromkeys(range(data.all_cells), ' ')  #  !!!!!!!!!!!!!!
+    
     while True:
         number = int(input('\nСколько человек будет играть? Введите 1 или 2: '))
         
@@ -60,7 +62,7 @@ def game() -> list[str] | None:
     # Инициализация перед началом партии
     data.wins = utils.generator_wins()
     data.field_template = utils.generator_field()
-    data.board = dict.fromkeys(range(data.all_cells), ' ')  #  !!!!!!!!!!!!!!
+#    data.board = dict.fromkeys(range(data.all_cells), ' ')  #  !!!!!!!!!!!!!!
     data.max_width = max(len(str(n)) for n in data.all_cells_range)
     data.coords = [f'{n:>{data.max_width}}' for n in data.all_cells_range]
     # !!!!!!! пока сюда
@@ -229,10 +231,14 @@ def load() -> bool:
         utils.update_dim()
     
     # востанавливаем поле со сделанными ходами
+    data.board = dict.fromkeys(range(data.all_cells), ' ')  #  !!!!!!!!!!!!!!
     data.field_template = utils.generator_field()
     for index, value in enumerate(data.turns):
         data.board[value] = data.TOKENS[index%2]
    
+    data.max_width = max(len(str(n)) for n in data.all_cells_range)
+    data.coords = [f'{n:>{data.max_width}}' for n in data.all_cells_range]
+    
     # выводим игровое поле с последними ходами если они были сделаны
     if len(data.turns) > 0:
         print_board((len(data.turns) + 1)%2) 
