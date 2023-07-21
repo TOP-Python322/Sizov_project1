@@ -8,7 +8,10 @@ from pathlib import Path
 from re import compile
 from sys import path
 
-import utils
+#import utils
+
+DEBUG: bool = True
+debug_data: dict = {}
 
 
 ROOT_DIR = Path(path[0]).parent
@@ -21,7 +24,7 @@ name_pattern = compile(r'[a-zA-Zа-яА-Я][а-яА-Я\w]+')
 players_db: dict[str, dict[str, int]] = {}
 
 # база сохраненных партий
-saves_db: dict = {}
+saves_db: dict[frozenset, dict] = {}
 
 COMMANDS = {
     'помощь': ('help', 'помощь'),
@@ -62,6 +65,11 @@ all_cells_range: range = range(all_cells)
 field_template: str = None
 
 TOKENS = ('X', 'O')
+
+WEIGHT_OWN: float = 1.5
+WEIGHT_FOE: float = 1.0
+
+START_MATRICES: tuple = None
 
 #turns: dict[int, str] = {}
 turns: dict[int] = []

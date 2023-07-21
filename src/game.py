@@ -60,9 +60,14 @@ def game() -> list[str] | None:
     # Инициализация перед началом партии
     data.wins = utils.generator_wins()
     data.field_template = utils.generator_field()
-    data.board = dict.fromkeys(range(data.all_cells), ' ')
+    data.board = dict.fromkeys(range(data.all_cells), ' ')  #  !!!!!!!!!!!!!!
     data.max_width = max(len(str(n)) for n in data.all_cells_range)
     data.coords = [f'{n:>{data.max_width}}' for n in data.all_cells_range]
+    # !!!!!!! пока сюда
+    data.START_MATRICES = (
+        bot.calc_sm_cross(),
+        bot.calc_sm_zero()
+    )
 
     #  Цикл до максимального количества ходов
     for step in range(len(data.turns), data.all_cells):
