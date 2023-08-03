@@ -74,23 +74,24 @@ def print_statistics() -> None:
         print(f'|{"-"*width}|')
 
     
-def update_dim() -> None:
+def update_dim(new_dim: int = None) -> None:
     """ Обновляет размер поля"""    
-#    добавить здесь обработку исключения на некорректный ввод
-    while True:
-        try:
-            dim = int(input(data.MESSAGES['размер поля']))
-        except ValueError:
-            print(data.MESSAGES['недопустимое значение']) 
-        else:  
-            if 3<=dim <= 20:
-                break
-            else:
-                print(data.MESSAGES['некорректный размер'])
 
-    data.dim = dim
-    data.dim_range = range(dim)
-    data.all_cells = dim**2
+    if new_dim is None:
+        while True:
+            try:
+                new_dim = int(input(data.MESSAGES['размер поля']))
+            except ValueError:
+                print(data.MESSAGES['недопустимое значение']) 
+            else:  
+                if 3<=new_dim <= 20:
+                    break
+                else:
+                    print(data.MESSAGES['некорректный размер'])
+
+    data.dim = new_dim
+    data.dim_range = range(new_dim)
+    data.all_cells = new_dim**2
     data.all_cells_range = range(data.all_cells)
     # выводим координатную сетку с новыми настройками
     show_field()
