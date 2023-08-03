@@ -205,7 +205,10 @@ def load() -> bool:
     if len(save_slots) > 1:
         print(f'Для игрока {data.authorized_player} доступны незавершенные партии со следующими игроками: ')
         for index, player in enumerate(save_slots):
-            print(f'{player} -  индекс {index}')
+            if player.startswith('#'):
+                print(f'{"легкий бот" if player == "#1" else "сложный бот"} -  индекс {index}')
+            else:
+                print(f'{player} -  индекс {index}')
         
         while True:   
             index_save = input('Введите индекс игрока с которым хотите возобновить партию: ')
