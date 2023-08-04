@@ -129,10 +129,10 @@ def get_human_turn() -> int | None:
 
 
 
-def print_board(step: int) -> None:
+def print_board(queue: int) -> None:
     """Выводит игровое поле с выводом ходов"""
     padding = get_terminal_size().columns - (data.max_width+3)*data.dim*2
-    if step == 1:
+    if queue == 1:
         print(utils.concatenate_lines(utils.generator_field(data.max_width).format(*data.coords), data.field_template.format(*data.board.values()), padding = padding))
     else:
         print(utils.concatenate_lines(data.field_template.format(*data.board.values()), utils.generator_field(data.max_width).format(*data.coords), padding = padding))

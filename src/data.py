@@ -8,9 +8,8 @@ from pathlib import Path
 from re import compile
 from sys import path
 
-#import utils
 
-DEBUG: bool = True
+DEBUG: bool = False
 debug_data: dict = {}
 
 
